@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe SubnetFormatValidator do
 
   let(:fake_model) { FakeModel.new(

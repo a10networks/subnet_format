@@ -8,8 +8,9 @@ class SubnetFormatValidator < ActiveModel::Validator
   rescue ArgumentError
     ip_argument_error
   end
-  
+
   private
+
     def validate_dhcp_range(dhcp_values)
       dhcp_start = dhcp_values[:dhcp_start]
       dhcp_end   = dhcp_values[:dhcp_end]
@@ -23,7 +24,7 @@ class SubnetFormatValidator < ActiveModel::Validator
     def ip_argument_error
       @record.errors[:base] << (options[:message] || "is an invalid ip")
     end
-    
+
     def dhcp_range_error
       @record.errors[:base] << (options[:message] || 
         "has an invalid DHCP range, valid range: #{ @ip.to_range.first } to #{ @ip.to_range.last }")
