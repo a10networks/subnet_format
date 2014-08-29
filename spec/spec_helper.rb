@@ -4,13 +4,11 @@ require 'rspec'
 require 'active_model'
 require 'subnet_format'
 
-class FakeModel
+class FakeModelBase
   include ActiveModel::Validations
 
   attr_accessor :network_address_ip, :gateway_ip, :dhcp_range_start,
                 :dhcp_range_stop, :subnet_mask
-
-  validates_with SubnetFormatValidator
 
   def initialize(attrs = {})
     self.network_address_ip = attrs[:network_address_ip]
@@ -19,4 +17,12 @@ class FakeModel
     self.dhcp_range_stop    = attrs[:dhcp_range_stop]
     self.subnet_mask        = attrs[:subnet_mask]
   end
+end
+
+class FakeModel < FakeModelBase
+  validates_with SubnetFormatValidator
+end
+
+class FakeModelWithValidationOptions < FakeModelBase
+  validates_with SubnetFormatValidator, network_address_ip: '1.2.3.4'
 end
