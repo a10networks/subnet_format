@@ -11,8 +11,8 @@ class SubnetFormatValidator < ActiveModel::Validator
 
   private
 
-    def network_address_ip
-      options[:network_addressIp] || @record.network_address_ip
+    def network_address_prefix
+      options[:network_address_prefix] || @record.network_address_prefix
     end
 
     def subnet_mask
@@ -28,14 +28,14 @@ class SubnetFormatValidator < ActiveModel::Validator
     end
 
     def ip
-      IPAddr.new "#{ network_address_ip }/#{ subnet_mask }"
+      IPAddr.new "#{ network_address_prefix }/#{ subnet_mask }"
     end
 
     def validate_dhcp_range
       ip_to_validate = ip
 
       unless ip_to_validate.include?(dhcp_range_start) and ip_to_validate.include?(dhcp_range_stop)
-        dhcp_range_error(invalid_ip)
+        dhcp_range_error(ip_to_validate)
       end
     end
 

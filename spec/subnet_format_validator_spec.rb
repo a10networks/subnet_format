@@ -3,7 +3,7 @@ describe SubnetFormatValidator do
   let(:network) {
     {
       subnet_mask: '255.255.255.0',
-      network_address_ip: '192.168.0.1',
+      network_address_prefix: '192.168.0.1',
       dhcp_range_stop: '192.168.0.30',
       dhcp_range_start: '192.168.0.5'
     }
@@ -31,8 +31,12 @@ describe SubnetFormatValidator do
     let(:fake_model) { FakeModelWithValidationOptions.new(network) }
 
     it 'should use them rather than the class method' do
-      expect(FakeModelWithValidationOptions).to_not receive(:network_address_ip)
+      expect(FakeModelWithValidationOptions).to_not receive(:network_address_prefix)
       fake_model.valid?
+    end
+
+    it 'should still be valid' do
+      expect(fake_model.valid?).to be_truthy
     end
   end
 end
