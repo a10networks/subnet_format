@@ -6,6 +6,7 @@ require 'subnet_format'
 
 class FakeModelBase
   include ActiveModel::Validations
+  include ActiveModel::Serialization
 
   attr_accessor :network_address_prefix, :gateway_ip, :dhcp_range_start,
                 :dhcp_range_stop, :subnet_mask
@@ -24,5 +25,12 @@ class FakeModel < FakeModelBase
 end
 
 class FakeModelWithValidationOptions < FakeModelBase
-  validates_with SubnetFormatValidator, network_address_prefix: '192.168.0.31'
+  attr_accessor :new_network_address_prefix_attr
+
+  def initialize(attrs = {})
+    super
+    self.new_network_address_prefix_attr = attrs[:network_address_prefix]
+  end
+
+  validates_with SubnetFormatValidator, network_address_prefix: :new_network_address_prefix_attr
 end
