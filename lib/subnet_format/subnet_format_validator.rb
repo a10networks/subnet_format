@@ -11,31 +11,31 @@ class SubnetFormatValidator < ActiveModel::Validator
 
   private
 
-    def network_address_ip
-      options[:network_addressIp] || @record.network_address_ip
+    def network_address_prefix
+      @record.send(options[:network_address_prefix] || :network_address_prefix)
     end
 
     def subnet_mask
-      options[:subnet_mask] || @record.subnet_mask
+      @record.send(options[:subnet_mask] || :subnet_mask)
     end
 
     def dhcp_range_start
-      options[:dhcp_range_start] || @record.dhcp_range_start
+      @record.send(options[:dhcp_range_start] || :dhcp_range_start)
     end
 
     def dhcp_range_stop
-      options[:dhcp_range_stop] || @record.dhcp_range_stop
+      @record.send(options[:dhcp_range_stop] || :dhcp_range_stop)
     end
 
     def ip
-      IPAddr.new "#{ network_address_ip }/#{ subnet_mask }"
+      IPAddr.new "#{ network_address_prefix }/#{ subnet_mask }"
     end
 
     def validate_dhcp_range
       ip_to_validate = ip
 
       unless ip_to_validate.include?(dhcp_range_start) and ip_to_validate.include?(dhcp_range_stop)
-        dhcp_range_error(invalid_ip)
+        dhcp_range_error(ip_to_validate)
       end
     end
 
