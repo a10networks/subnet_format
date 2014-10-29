@@ -40,11 +40,11 @@ class SubnetFormatValidator < ActiveModel::Validator
     end
 
     def ip_argument_error
-      @record.errors[:base] << (options[:message] || "is an invalid ip")
+      @record.errors[:base] << (options[:message] || "The ip you provided was invalid")
     end
 
     def dhcp_range_error(invalid_ip)
       @record.errors[:base] << (options[:message] ||
-        "has an invalid DHCP range, valid range: #{ invalid_ip.to_range.first } to #{ invalid_ip.to_range.last }")
+        "The DHCP range you provided was invalid, try from #{ invalid_ip.to_range.first } to #{ invalid_ip.to_range.last }")
     end
 end
