@@ -9,6 +9,15 @@ describe SubnetFormatValidator do
     }
   }
 
+  let(:ten_dot_network) {
+    {
+      subnet_mask: '255.255.0.0',
+      network_address_prefix: '10.0.0.1',
+      dhcp_range_stop: '10.0.0.200',
+      dhcp_range_start: '10.0.0.10'
+    }
+  }
+
   let(:fake_model) { FakeModel.new(network) }
 
   subject { fake_model }
@@ -37,6 +46,20 @@ describe SubnetFormatValidator do
 
     it 'should still be valid' do
       expect(fake_model.valid?).to be_truthy
+    end
+  end
+
+  context 'with a 10.X IP' do
+
+    let(:fake_model) { FakeModel.new(ten_dot_network) }
+
+    it { should be_valid }
+
+    context 'with an invalid IP' do
+
+      before { fake_model.dhcp_range_stop = '10.0.0.256' }
+
+      it { should_not be_valid }
     end
   end
 end
